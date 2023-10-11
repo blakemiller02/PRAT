@@ -1,4 +1,4 @@
 foreach ($nerd in $final) {
-    Set-ADUser -ChangePasswordAtLogon $true
+    Set-ADUser $nerd -ChangePasswordAtLogon $true
 }
 	
