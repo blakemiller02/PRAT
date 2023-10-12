@@ -33,14 +33,14 @@ $samname = $output | where {($_.distinguishedname -notmatch "OU=EXAMPLE")} | sel
 
 
 $final = foreach ($user in $samname) {
-    get-aduser $user -properties passwordlastset,mail | select mail,passwordlastset | Where-Object {$_.PasswordLastSet -lt (Get-Date).adddays(-10)}
+    get-aduser $user -properties passwordlastset,mail | select mail,passwordlastset | Where-Object {$_.PasswordLastSet -lt (Get-Date -Date 10/4/2023)}
 }
 #For each SAM Name, retrieve the AD user's PasswordLastSet, and email. 
-#Filter out users who's PasswordLastSet is newer than X days prior to current day
+#Filter out users who's PasswordLastSet is newer than X arbitrary day. (Usually the day the DPAT is ran)
 
     echo "This is how many users have changed their passsword: "($recipients.Count - $final.Count)
     #Users who have changed their password
 
-    echo "This is who has not changed it, of 100/425, as well as the last time they did:"($final | sort mail | select -first 100 | where mail -NotLike "")
+    echo "This is who has not changed it, of 100/425, as well as the last time they did:"($final | sort mail | select -First 100 | where mail -NotLike "" | where passwordlastset -NotLike "")
     #List emails and PasswordLastSet of users who have not changed their password
 
